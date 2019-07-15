@@ -19,7 +19,7 @@ def create_app(config_name):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
 
-    @app.route('/bucketlists/', methods=['POST', 'GET'])
+    @app.route('/api/bucketlists/', methods=['POST', 'GET'])
     def bucketlists():
         if request.method == "POST":
             name = str(request.data.get('name', ''))
@@ -33,8 +33,8 @@ def create_app(config_name):
                 buckelist = Bucketlist(shortcode=shortcode)
                 buckelist = Bucketlist(msisdn=msisdn)
                 buckelist = Bucketlist(commandid=commandid)
-                billrefno = Bucketlist(billrefno=billrefno)
-                refno = Bucketlist(refno)
+                bucketlist = Bucketlist(billrefno=billrefno)
+                bucketlist = Bucketlist(refno=refno)
                 bucketlist.save()
                 response = jsonify({
                     'id': bucketlist.id,
