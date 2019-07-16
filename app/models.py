@@ -1,13 +1,13 @@
 from app import db
 
 
-class Bucketlist(db.Model):
+class Payment(db.Model):
     """This class represents the bucketlist table."""
 
-    __tablename__ = 'bucketlists'
+    __tablename__ = 'payments'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255))
+    amount = db.Column(db.Integer)
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
     date_modified = db.Column(
         db.DateTime, default=db.func.current_timestamp(),
@@ -19,11 +19,11 @@ class Bucketlist(db.Model):
     refno = db.Column(db.String(255))
 
     def __init__(
-                self, name,
+                self, amount,
                 shortcode, msisdn, commandid, billrefnumber,
                 refno):
-        """initialize with name."""
-        self.name = name
+        """initialize."""
+        self.amount = amount
         self.shortcode = shortcode
         self.msisdn = msisdn
         self.commandid = commandid
@@ -36,11 +36,11 @@ class Bucketlist(db.Model):
 
     @staticmethod
     def get_all():
-        return Bucketlist.query.all()
+        return Payment.query.all()
 
     def delete(self):
         db.session.delete(self)
         db.session.commit()
 
     def __repr__(self):
-        return "<Bucketlist: {}>".format(self.name)
+        return "<Payment: {}>".format(self.refno)

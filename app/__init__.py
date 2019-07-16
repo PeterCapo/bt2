@@ -12,114 +12,117 @@ db = SQLAlchemy()
 
 
 def create_app(config_name):
-    from app.models import Bucketlist
+    from app.models import Payment
     app = FlaskAPI(__name__, instance_relative_config=True)
     app.config.from_object(app_config[config_name])
     app.config.from_pyfile('config.py')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
 
-    @app.route('/api/bucketlists/', methods=['POST', 'GET'])
-    def bucketlists():
+    @app.route('/api/payments/', methods=['POST', 'GET'])
+    def payments():
         if request.method == "POST":
-            name = str(request.data.get('name', ''))
+            amount = str(request.data.get('amount', ''))
             shortcode = int(request.data.get('shortcode', ''))
             msisdn = int(request.data.get('msisdn', ''))
             commandid = str(request.data.get('commandid', ''))
             billrefnumber = str(request.data.get('billrefno', ''))
             refno = str(request.data.get('refno', ''))
-            if name and shortcode and msisdn and commandid and billrefnumber and refno:
-                bucketlist = Bucketlist(name=name, shortcode=shortcode, msisdn=msisdn, commandid=commandid, billrefnumber=billrefnumber, refno=refno)
-                bucketlist.save()
+            if amount and shortcode and msisdn and commandid and billrefnumber and refno:
+                payment = Payment(amount=amount,
+                                  shortcode=shortcode, msisdn=msisdn,
+                                  commandid=commandid,
+                                  billrefnumber=billrefnumber, refno=refno)
+                payment.save()
                 response = jsonify({
-                    'id': bucketlist.id,
-                    'name': bucketlist.name,
-                    'date_created': bucketlist.date_created,
-                    'date_modified': bucketlist.date_modified,
-                    'shortcode': bucketlist.shortcode,
-                    'msisdn': bucketlist.msisdn,
-                    'commandid': bucketlist.commandid,
-                    'billrefnumber': bucketlist.billrefnumber,
-                    'refno': bucketlist.refno
+                    'id': payment.id,
+                    'amount': payment.amount,
+                    'date_created': payment.date_created,
+                    'date_modified': payment.date_modified,
+                    'shortcode': payment.shortcode,
+                    'msisdn': payment.msisdn,
+                    'commandid': payment.commandid,
+                    'billrefnumber': payment.billrefnumber,
+                    'refno': payment.refno
                 })
                 response.status_code = 201
                 return response
         else:
             # GET
-            bucketlists = Bucketlist.get_all()
+            payments = Payment.get_all()
             results = []
 
-            for bucketlist in bucketlists:
+            for payment in payments:
                 obj = {
-                    'id': bucketlist.id,
-                    'name': bucketlist.name,
-                    'date_created': bucketlist.date_created,
-                    'date_modified': bucketlist.date_modified,
-                    'shortcode': bucketlist.shortcode,
-                    'msisdn': bucketlist.msisdn,
-                    'commandid': bucketlist.commandid,
-                    'billrefnumber': bucketlist.billrefnumber,
-                    'refno': bucketlist.refno
+                    'id': payment.id,
+                    'amount': payment.amount,
+                    'date_created': payment.date_created,
+                    'date_modified': payment.date_modified,
+                    'shortcode': payment.shortcode,
+                    'msisdn': payment.msisdn,
+                    'commandid': payment.commandid,
+                    'billrefnumber': payment.billrefnumber,
+                    'refno': payment.refno
                 }
                 results.append(obj)
             response = jsonify(results)
             response.status_code = 200
             return response
 
-    @app.route('api/bucketlists/<int:id>', methods=['GET', 'PUT', 'DELETE'])
-    def bucketlist_manipulation(id, **kwargs):
-            # retrieve a buckelist using it's ID
-        bucketlist = Bucketlist.query.filter_by(id=id).first()
-        if not bucketlist:
+    @app.route('/api/payments/<int:id>', methods=['GET', 'PUT', 'DELETE'])
+    def payment_manipulation(id, **kwargs):
+            # retrieve a payment using it's ID
+        payment = Payment.query.filter_by(id=id).first()
+        if not payment:
             # Raise an HTTPException with a 404 not found status code
             abort(404)
 
         if request.method == 'DELETE':
-            bucketlist.delete()
+            payment.delete()
             return {
                 "message":
-                "bucketlist {} deleted successfully".format(bucketlist.id)
+                "payment {} deleted successfully".format(payment.id)
                  }, 200
 
         elif request.method == 'PUT':
-            name = str(request.data.get('name', ''))
+            amount = str(request.data.get('amount', ''))
             shortcode = int(request.data.get('shortcode', ''))
             msisdn = int(request.data.get('msisdn', ''))
             commandid = str(request.data.get('commandid', ''))
             billrefno = str(request.data.get('billrefno', ''))
             refno = str(request.data.get('refno', ''))
-            bucketlist.name = name
-            bucketlist.shortcode = shortcode
-            bucketlist.msisdn = msisdn
-            bucketlist.commandid = commandid
-            bucketlist.billrefnumber = billrefnumber
-            bucketlist.refno = refno
-            bucketlist.save()
+            payment.amount = amount
+            payment.shortcode = shortcode
+            payment.msisdn = msisdn
+            payment.commandid = commandid
+            payment.billrefnumber = billrefnumber
+            payment.refno = refno
+            payment.save()
             response = jsonify({
-                'id': bucketlist.id,
-                'name': bucketlist.name,
-                'date_created': bucketlist.date_created,
-                'date_modified': bucketlist.date_modified,
-                'shortcode': bucketlist.shortcode,
-                'msisdn': bucketlist.msisdn,
-                'commandid': bucketlist.commandid,
-                'billrefnumber': bucketlist.billrefnumber,
-                'refno': bucketlist.refno
+                'id': payment.id,
+                'amount': payment.amount,
+                'date_created': payment.date_created,
+                'date_modified': payment.date_modified,
+                'shortcode': payment.shortcode,
+                'msisdn': payment.msisdn,
+                'commandid': payment.commandid,
+                'billrefnumber': payment.billrefnumber,
+                'refno': payment.refno
             })
             response.status_code = 200
             return response
         else:
             # GET
             response = jsonify({
-                'id': bucketlist.id,
-                'name': bucketlist.name,
-                'date_created': bucketlist.date_created,
-                'date_modified': bucketlist.date_modified,
-                'shortcode': bucketlist.shortcode,
-                'msisdn': bucketlist.msisdn,
-                'commandid': bucketlist.commandid,
-                'billrefnumber': bucketlist.billrefnumber,
-                'refno': bucketlist.refno
+                'id': payment.id,
+                'amount': payment.amount,
+                'date_created': payment.date_created,
+                'date_modified': payment.date_modified,
+                'shortcode': payment.shortcode,
+                'msisdn': payment.msisdn,
+                'commandid': payment.commandid,
+                'billrefnumber': payment.billrefnumber,
+                'refno': payment.refno
             })
             response.status_code = 200
             return response
