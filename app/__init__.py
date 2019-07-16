@@ -55,18 +55,18 @@ def create_app(config_name):
                     'name': bucketlist.name,
                     'date_created': bucketlist.date_created,
                     'date_modified': bucketlist.date_modified,
-                    'shortcode': buckelist.shortcode,
-                    'msisdn': buckelist.msisdn,
-                    'commandid': buckelist.commandid,
-                    'billrefnumber': buckelist.billrefnumber,
-                    'refno': buckelist.refno
+                    'shortcode': bucketlist.shortcode,
+                    'msisdn': bucketlist.msisdn,
+                    'commandid': bucketlist.commandid,
+                    'billrefnumber': bucketlist.billrefnumber,
+                    'refno': bucketlist.refno
                 }
                 results.append(obj)
             response = jsonify(results)
             response.status_code = 200
             return response
 
-    @app.route('/bucketlists/<int:id>', methods=['GET', 'PUT', 'DELETE'])
+    @app.route('api/bucketlists/<int:id>', methods=['GET', 'PUT', 'DELETE'])
     def bucketlist_manipulation(id, **kwargs):
             # retrieve a buckelist using it's ID
         bucketlist = Bucketlist.query.filter_by(id=id).first()
@@ -89,22 +89,22 @@ def create_app(config_name):
             billrefno = str(request.data.get('billrefno', ''))
             refno = str(request.data.get('refno', ''))
             bucketlist.name = name
-            buckelist.shortcode = shortcode
-            buckelist.msisdn = msisdn
-            buckelist.commandid = commandid
-            buckelist.billrefno = billrefno
-            buckelist.refno = refno
+            bucketlist.shortcode = shortcode
+            bucketlist.msisdn = msisdn
+            bucketlist.commandid = commandid
+            bucketlist.billrefnumber = billrefnumber
+            bucketlist.refno = refno
             bucketlist.save()
             response = jsonify({
                 'id': bucketlist.id,
                 'name': bucketlist.name,
                 'date_created': bucketlist.date_created,
                 'date_modified': bucketlist.date_modified,
-                'shortcode': buckelist.shortcode,
-                'msisdn': buckelist.msisdn,
-                'commandid': buckelist.commandid,
-                'billrefno': buckelist.billrefno,
-                'refno': buckelist.refno
+                'shortcode': bucketlist.shortcode,
+                'msisdn': bucketlist.msisdn,
+                'commandid': bucketlist.commandid,
+                'billrefnumber': bucketlist.billrefnumber,
+                'refno': bucketlist.refno
             })
             response.status_code = 200
             return response
@@ -115,11 +115,11 @@ def create_app(config_name):
                 'name': bucketlist.name,
                 'date_created': bucketlist.date_created,
                 'date_modified': bucketlist.date_modified,
-                'shortcode': buckelist.shortcode,
-                'msisdn': buckelist.msisdn,
-                'commandid': buckelist.commandid,
-                'billrefno': buckelist.billrefno,
-                'refno': buckelist.refno
+                'shortcode': bucketlist.shortcode,
+                'msisdn': bucketlist.msisdn,
+                'commandid': bucketlist.commandid,
+                'billrefnumber': bucketlist.billrefnumber,
+                'refno': bucketlist.refno
             })
             response.status_code = 200
             return response
