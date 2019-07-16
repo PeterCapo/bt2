@@ -18,9 +18,17 @@ class Bucketlist(db.Model):
     billrefnumber = db.Column(db.String(255))
     refno = db.Column(db.String(255))
 
-    def __init__(self, name):
+    def __init__(
+                self, name,
+                shortcode, msisdn, commandid, billrefnumber,
+                refno):
         """initialize with name."""
         self.name = name
+        self.shortcode = shortcode
+        self.msisdn = msisdn
+        self.commandid = commandid
+        self.billrefnumber = billrefnumber
+        self.refno = refno
 
     def save(self):
         db.session.add(self)

@@ -26,26 +26,21 @@ def create_app(config_name):
             shortcode = int(request.data.get('shortcode', ''))
             msisdn = int(request.data.get('msisdn', ''))
             commandid = str(request.data.get('commandid', ''))
-            billrefno = str(request.data.get('billrefno', ''))
+            billrefnumber = str(request.data.get('billrefno', ''))
             refno = str(request.data.get('refno', ''))
-            if name and shortcode and msisdn and commandid and billrefno and refno:
-                bucketlist = Bucketlist(name=name)
-                buckelist = Bucketlist(shortcode=shortcode)
-                buckelist = Bucketlist(msisdn=msisdn)
-                buckelist = Bucketlist(commandid=commandid)
-                bucketlist = Bucketlist(billrefno=billrefno)
-                bucketlist = Bucketlist(refno=refno)
+            if name and shortcode and msisdn and commandid and billrefnumber and refno:
+                bucketlist = Bucketlist(name=name, shortcode=shortcode, msisdn=msisdn, commandid=commandid, billrefnumber=billrefnumber, refno=refno)
                 bucketlist.save()
                 response = jsonify({
                     'id': bucketlist.id,
                     'name': bucketlist.name,
                     'date_created': bucketlist.date_created,
                     'date_modified': bucketlist.date_modified,
-                    'shortcode': buckelist.shortcode,
-                    'msisdn': buckelist.msisdn,
-                    'commandid': buckelist.commandid,
-                    'billrefno': buckelist.billrefno,
-                    'refno': buckelist.refno
+                    'shortcode': bucketlist.shortcode,
+                    'msisdn': bucketlist.msisdn,
+                    'commandid': bucketlist.commandid,
+                    'billrefnumber': bucketlist.billrefnumber,
+                    'refno': bucketlist.refno
                 })
                 response.status_code = 201
                 return response
@@ -63,7 +58,7 @@ def create_app(config_name):
                     'shortcode': buckelist.shortcode,
                     'msisdn': buckelist.msisdn,
                     'commandid': buckelist.commandid,
-                    'billrefno': buckelist.billrefno,
+                    'billrefnumber': buckelist.billrefnumber,
                     'refno': buckelist.refno
                 }
                 results.append(obj)
